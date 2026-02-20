@@ -17,13 +17,10 @@ const getOrdinalSuffix = (n: number) => {
 
 
 const BadgeYear = ({ day, month, year, }: { year: number, month: string, day: number }) => {
-
-
     return (
         <Badge>{`${day} ${month} ${year}`}</Badge>
     )
 }
-
 
 const BadgeRamadanDay = ({ ramadanDay }: { ramadanDay: number | undefined }) => {
     if (ramadanDay === undefined) return null

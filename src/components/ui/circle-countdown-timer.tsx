@@ -1,43 +1,29 @@
 "use client";
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRamadanStore } from "@/store/store";
-import { calculateRamadanTime } from "@/utils/ramadanTimer";
+import { calculateRamadanTime, getIftarAndSuhoorTime } from "@/utils/ramadanTimer";
+import { useRamadanCountdown } from "../hooks/useRamadanCountdown";
+import { useResponsiveSize } from "../hooks/useResponsiveSize";
 
-interface CountdownTimerProps {
-    duration?: number; // секунды
-}
-
-export default function MyCountdownTimer({ duration = 240 }: CountdownTimerProps) {
+export default function MyCountdownTimer() {
     const setRamadanTime = useRamadanStore((state) => state.setRamadanTime);
+    const setRamadanDay = useRamadanStore((state) => state.setRamadanDay);
 
-    const { iftar, suhoor } = useRamadanStore((state) => state);
-    if (suhoor <= 0) duration = iftar
-    else duration = suhoor
+    const duration = useRamadanCountdown()
+    const size = useResponsiveSize()
 
-
-    const [size, setSize] = useState(180);
     useEffect(() => {
-        setRamadanTime(calculateRamadanTime());
-        function handleResize() {
+        const { ramadanDay } = getIftarAndSuhoorTime()
+        setRamadanDay({ ramadanDay })
+        setRamadanTime(calculateRamadanTime())
+    }, [setRamadanDay, setRamadanTime])
 
-            // console.log("WINDOW", window.innerWidth)
-            if (window.innerWidth >= 1024) {
-                setSize(400); // desktop
-            } else if (window.innerWidth >= 768) {
-                setSize(320); // tablet
-            } else {
-                setSize(240); // mobile
-            }
-        }
-        handleResize();
-        window.addEventListener("resize", handleResize);
 
-        return () => window.removeEventListener("resize", handleResize);
+    if (duration === 0) return null
 
-    }, []);
     return (
         <CountdownCircleTimer
             isPlaying
@@ -82,7 +68,7 @@ function TimeRenderer({ remainingTime }: { remainingTime: number }) {
 
     return (
         <div className="flex justify-between items-center">
-            < TimeStyleItem number={hours} label="Hours" />
+            <TimeStyleItem number={hours} label="Hours" />
             <TimeStyleItem number={minutes} label="Minutes" />
             <TimeStyleItem number={seconds} label="Seconds" />
         </div >
@@ -98,7 +84,6 @@ const TimeStyleItem = ({ number, label }: TimeStyleItemProps) => (
     <div className="flex flex-1 flex-col items-center justify-center gap-1 px-3 py-6 md:gap-2 md:py-8">
         <div className="h-px w-full  mt-2"></div>
         <div className="relative w-full overflow-hidden text-center">
-
             <AnimatePresence mode="wait">
                 <motion.span
                     key={number}
@@ -111,13 +96,10 @@ const TimeStyleItem = ({ number, label }: TimeStyleItemProps) => (
                     {number < 10 ? `0${number}` : number}
                 </motion.span>
             </AnimatePresence>
-
         </div>
-
         <span className="text-sm font-light dark:text-gray-400 text-gray-500 md:text-base lg:text-lg transition-colors duration-500">
             {label}
         </span>
-
         <div className="h-px w-full bg-border mt-2"></div>
     </div>
 )

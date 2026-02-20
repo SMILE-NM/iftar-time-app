@@ -1,16 +1,15 @@
-// services/ramadanTimer.ts
+'use client';
 import {
   getNextRamadanDay,
+  getRamadanDay,
   getRamadanEventDates,
 } from '@/services/ramadanServices';
 import { getSeoulTime } from '@/utils/timeUtils';
 
 export function calculateRamadanTime(): { suhoor: number; iftar: number } {
-  // const test = new Date();
-
-  // const now = new Date(test.getTime() + 66 * 60 * 1000);
-
   const now = getSeoulTime();
+
+  console.log('getSeoulTime result', now);
 
   const ramadanDay = getNextRamadanDay(now);
 
@@ -32,7 +31,9 @@ export function calculateRamadanTime(): { suhoor: number; iftar: number } {
 
 export function getIftarAndSuhoorTime() {
   const now = getSeoulTime();
-  const ramadanDay = getNextRamadanDay(now);
+  console.log('Soul Time', now);
+  const ramadanDay = getRamadanDay(now);
+  console.log('ramadanDay', ramadanDay);
   if (!ramadanDay)
     return {
       suhoorTime: '',

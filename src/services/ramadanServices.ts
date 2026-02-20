@@ -1,11 +1,11 @@
 // services/ramadanService.ts
 import { IRamadanTime, RAMADAN_TIMES_SEOUL } from '@/data/ramadan-times';
-import { getSeoulTime } from '@/utils/timeUtils';
 
 export function findRamadanByDate(date: Date): IRamadanTime | undefined {
-  return RAMADAN_TIMES_SEOUL.find(
-    (r) => r.date === date.toISOString().slice(0, 10),
-  );
+  const seoulDate = date.toLocaleDateString('en-CA', {
+    timeZone: 'Asia/Seoul',
+  });
+  return RAMADAN_TIMES_SEOUL.find((r) => r.date === seoulDate);
 }
 
 export function getRamadanEventDates(ramadanTime: IRamadanTime) {
@@ -39,5 +39,13 @@ export function getNextRamadanDay(now: Date): IRamadanTime | undefined {
     today = findRamadanByDate(tomorrow) ?? undefined;
   }
 
+  return today;
+}
+
+export function getRamadanDay(now: Date): IRamadanTime | undefined {
+  let today = findRamadanByDate(now);
+  if (!today) return undefined;
+
+  console.log('getRamadanDay', today);
   return today;
 }

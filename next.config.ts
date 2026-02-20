@@ -1,24 +1,22 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-};
-
-export default nextConfig;
-
 // import type { NextConfig } from 'next';
-// import withPWAInit from 'next-pwa';
 
-// const withPWA = withPWAInit({
-//   dest: 'public',
-//   register: true,
-//   skipWaiting: true,
-//   disable: process.env.NODE_ENV === 'development',
+// const bundleAnalyzer = withBundleAnalyzer({
+//   enabled: process.env.ANALYZE === 'true',
 // });
 
 // const nextConfig: NextConfig = {
-//   reactStrictMode: true,
+//   /* config options here */
+//   reactCompiler: true,
 // };
 
-// export default withPWA(nextConfig);
+// export default nextConfig;
+
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+export default bundleAnalyzer({
+  reactCompiler: true,
+});

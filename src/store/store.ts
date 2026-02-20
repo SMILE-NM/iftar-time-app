@@ -1,22 +1,19 @@
 import { create } from 'zustand';
-enum RamadanMessage {
-  Suhoor = 'Time until Iftar',
-  Iftar = 'Suhoor ends in',
-}
 
-interface RamadanTimeStore {
-  //   ramadanTitle:
+interface RamadanTimeState {
+  ramadanDay: number;
   suhoor: number;
   iftar: number;
   setRamadanTime: (time: { suhoor: number; iftar: number }) => void;
+  setRamadanDay: (day: { ramadanDay: number }) => void;
 }
 
-const useRamadanStore = create<RamadanTimeStore>()((set) => ({
-  iftarTimeToday: '',
-  suhurTimeToday: '',
+const useRamadanStore = create<RamadanTimeState>()((set) => ({
+  ramadanDay: 0,
   iftar: 0,
   suhoor: 0,
   setRamadanTime: (time: { suhoor: number; iftar: number }) => set(time),
+  setRamadanDay: (day: { ramadanDay: number }) => set(day),
 }));
 
 export { useRamadanStore };
