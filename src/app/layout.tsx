@@ -39,8 +39,9 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
 
+        <GoogleTagManager gtmId="G-9JSER36SQ0" />
       </body>
-      <GoogleTagManager gtmId="G-9JSER36SQ0" />
+
     </html>
   );
 }
